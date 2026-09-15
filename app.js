@@ -1,4 +1,5 @@
 let todosPersonagens = [];
+let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
 
 async function buscarPersonagens() {
   try {
@@ -16,15 +17,36 @@ function mostrarPersonagens(personagens) {
   lista.innerHTML = "";
 
   personagens.forEach((personagem) => {
+    
+    const ehFavorito = favoritos.includes(personagem.id);
+
     lista.innerHTML += `
-      <div class="card">
+      <div class="card ${ehFavorito ? "favorito" : ""}">
         <img src="${personagem.image}" alt="${personagem.name}">
         <h3>${personagem.name}</h3>
         <p>Espécie: ${personagem.species}</p>
         <p>Status: ${personagem.status}</p>
+        <button onclick="alternarFavorito(${personagem.id})">
+          ${ehFavorito ? "★ Favorito" : "☆ Favoritar"}
+        </button>
       </div>
     `;
   });
+}
+
+function alternarFavorito(id) {
+  if (favoritos.includes(id)) {
+
+    favoritos = favoritos.filter((favId) => favId !== id);
+  } else {
+   
+    favoritos.push(id);
+  }
+
+  localStorage.setItem("favoritos", JSON.stringify(favoritos));
+
+
+  mostrarPersonagens(todosPersonagens);
 }
 
 const campoBusca = document.getElementById("busca");

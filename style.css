@@ -21,3 +21,8 @@ body {
   width: 100%;
   border-radius: 8px;
 }
+
+.card.favorito {
+  border-color: gold;
+  background-color: #fff8e1;
+}
