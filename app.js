@@ -1,8 +1,11 @@
+let todosPersonagens = [];
+
 async function buscarPersonagens() {
   try {
     const resposta = await fetch("https://rickandmortyapi.com/api/character");
     const dados = await resposta.json();
-    mostrarPersonagens(dados.results);
+    todosPersonagens = dados.results;
+    mostrarPersonagens(todosPersonagens);
   } catch (erro) {
     console.log("Deu ruim:", erro);
   }
@@ -23,5 +26,17 @@ function mostrarPersonagens(personagens) {
     `;
   });
 }
+
+const campoBusca = document.getElementById("busca");
+
+campoBusca.addEventListener("input", () => {
+  const termo = campoBusca.value.toLowerCase();
+
+  const filtrados = todosPersonagens.filter((personagem) => {
+    return personagem.name.toLowerCase().includes(termo);
+  });
+
+  mostrarPersonagens(filtrados);
+});
 
 buscarPersonagens();
