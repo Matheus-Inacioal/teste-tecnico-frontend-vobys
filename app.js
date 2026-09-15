@@ -2,13 +2,17 @@ let todosPersonagens = [];
 let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
 
 async function buscarPersonagens() {
+  const lista = document.getElementById("lista");
+  lista.innerHTML = "<p>Carregando personagens...</p>"; // feedback de loading
+
   try {
     const resposta = await fetch("https://rickandmortyapi.com/api/character");
     const dados = await resposta.json();
     todosPersonagens = dados.results;
     mostrarPersonagens(todosPersonagens);
   } catch (erro) {
-    console.log("Deu ruim:", erro);
+    lista.innerHTML =
+      "<p>Ops! Não foi possível carregar os personagens. Tente novamente mais tarde.</p>";
   }
 }
 
@@ -17,7 +21,6 @@ function mostrarPersonagens(personagens) {
   lista.innerHTML = "";
 
   personagens.forEach((personagem) => {
-    
     const ehFavorito = favoritos.includes(personagem.id);
 
     lista.innerHTML += `
@@ -36,16 +39,23 @@ function mostrarPersonagens(personagens) {
 
 function alternarFavorito(id) {
   if (favoritos.includes(id)) {
-
     favoritos = favoritos.filter((favId) => favId !== id);
   } else {
-   
     favoritos.push(id);
   }
 
   localStorage.setItem("favoritos", JSON.stringify(favoritos));
+  mostrarPersonagens(todosPersonagens);
+}
 
+function mostrarSoFavoritos() {
+  const listaFavoritos = todosPersonagens.filter((personagem) =>
+    favoritos.includes(personagem.id)
+  );
+  mostrarPersonagens(listaFavoritos);
+}
 
+function mostrarTodos() {
   mostrarPersonagens(todosPersonagens);
 }
 
