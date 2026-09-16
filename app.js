@@ -71,4 +71,19 @@ campoBusca.addEventListener("input", () => {
   mostrarPersonagens(filtrados);
 });
 
+function filtrarPorStatus() {
+  const statusEscolhido = document.getElementById("filtroStatus").value;
+
+  if (statusEscolhido === "todos") {
+    
+    mostrarPersonagens(todosPersonagens);
+  } else {
+    
+    const filtrados = todosPersonagens.filter((personagem) => {
+      return personagem.status === statusEscolhido;
+    });
+    mostrarPersonagens(filtrados);
+  }
+}
+
 buscarPersonagens();

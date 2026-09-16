@@ -14,6 +14,14 @@
 <div class="filtros">
   <button onclick="mostrarTodos()">Todos</button>
   <button onclick="mostrarSoFavoritos()">Ver favoritos</button>
+
+  <select id="filtroStatus" onchange="filtrarPorStatus()">
+    <option value="todos">Todos os status</option>
+    <option value="Alive">Vivo</option>
+    <option value="Dead">Morto</option>
+    <option value="unknown">Desconhecido</option>
+  </select>
+
 </div>
 
   <div id="lista"></div>

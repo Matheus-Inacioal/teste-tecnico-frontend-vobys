@@ -92,6 +92,17 @@ button:hover {
   margin-bottom: 16px;
 }
 
+#filtroStatus {
+  background-color: #97ce4c;
+  color: #1a1a2e;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  margin: 4px;
+}
+
 .card.favorito {
   border-color: gold;
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
