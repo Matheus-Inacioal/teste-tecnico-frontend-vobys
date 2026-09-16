@@ -1,6 +1,7 @@
 let todosPersonagens = [];
 let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
 let paginaAtual = 1;
+let totalPaginas = null;
 
 async function buscarPersonagens(pagina = 1) {
   const lista = document.getElementById("lista");
@@ -11,7 +12,16 @@ async function buscarPersonagens(pagina = 1) {
 
   try {
     const resposta = await fetch(`https://rickandmortyapi.com/api/character?page=${pagina}`);
+
+    
+    if (!resposta.ok) {
+      throw new Error(`Erro ${resposta.status}`);
+    }
+
     const dados = await resposta.json();
+
+    
+    totalPaginas = dados.info.pages;
 
     if (pagina === 1) {
       todosPersonagens = dados.results;
@@ -20,13 +30,28 @@ async function buscarPersonagens(pagina = 1) {
     }
 
     mostrarPersonagens(todosPersonagens);
+
+    
+    atualizarBotaoCarregarMais();
+
   } catch (erro) {
     if (pagina === 1) {
       lista.innerHTML = "<p>Ops! Não foi possível carregar os personagens. Tente novamente mais tarde.</p>";
     } else {
-      alert("Muitas requisições em pouco tempo. Aguarde alguns segundos e tente novamente.");
+      alert("Não foi possível carregar mais personagens. " + erro.message);
       paginaAtual = paginaAtual - 1;
     }
+  }
+}
+
+function atualizarBotaoCarregarMais() {
+  const botao = document.querySelector(".carregar-mais");
+  if (!botao) return;
+
+  if (paginaAtual >= totalPaginas) {
+    botao.style.display = "none";
+  } else {
+    botao.style.display = "block";
   }
 }
 
@@ -39,7 +64,7 @@ function mostrarPersonagens(personagens) {
 
     lista.innerHTML += `
       <div class="card ${ehFavorito ? "favorito" : ""}">
-        <img src="${personagem.image}" alt="${personagem.name}">
+        <img src="${personagem.image}" alt="${personagem.name}" loading="lazy">
         <h3>${personagem.name}</h3>
         <p>Espécie: ${personagem.species}</p>
         <p>Status: ${personagem.status}</p>
