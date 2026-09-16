@@ -1,20 +1,73 @@
 body {
-  font-family: sans-serif;
-  padding: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #1a1a2e;   /* fundo escuro tipo espaço */
+  color: #f0f0f0;
+  padding: 24px;
+  margin: 0;
 }
+
+h1 {
+  text-align: center;
+  color: #97ce4c;              /* verde-portal do Rick and Morty */
+  text-shadow: 0 0 8px rgba(151, 206, 76, 0.5);  /* brilho no texto */
+  margin-bottom: 24px;
+}
+
+
+#busca {
+  display: block;
+  margin: 0 auto 16px;
+  padding: 10px 16px;
+  width: 100%;
+  max-width: 400px;
+  border: 2px solid #97ce4c;
+  border-radius: 20px;
+  background-color: #16213e;
+  color: #f0f0f0;
+  font-size: 16px;
+}
+
+#busca::placeholder {
+  color: #8a8aa0;
+}
+
+button {
+  background-color: #97ce4c;
+  color: #1a1a2e;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  margin: 4px;
+}
+
+button:hover {
+  background-color: #7fb33a;   
+}
+
 
 #lista {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 24px auto 0;
 }
 
+
 .card {
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  background-color: #16213e;
+  border: 2px solid #0f3460;
+  border-radius: 12px;
   padding: 12px;
-  width: 200px;
   text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);          
+  box-shadow: 0 8px 20px rgba(151, 206, 76, 0.3);
 }
 
 .card img {
@@ -22,7 +75,24 @@ body {
   border-radius: 8px;
 }
 
+.card h3 {
+  color: #97ce4c;
+  margin: 12px 0 8px;
+}
+
+.card p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.filtros {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
 .card.favorito {
   border-color: gold;
-  background-color: #fff8e1;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
 }
