@@ -1,18 +1,32 @@
 let todosPersonagens = [];
 let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+let paginaAtual = 1;
 
-async function buscarPersonagens() {
+async function buscarPersonagens(pagina = 1) {
   const lista = document.getElementById("lista");
-  lista.innerHTML = "<p>Carregando personagens...</p>"; // feedback de loading
+
+  if (pagina === 1) {
+    lista.innerHTML = "<p>Carregando personagens...</p>";
+  }
 
   try {
-    const resposta = await fetch("https://rickandmortyapi.com/api/character");
+    const resposta = await fetch(`https://rickandmortyapi.com/api/character?page=${pagina}`);
     const dados = await resposta.json();
-    todosPersonagens = dados.results;
+
+    if (pagina === 1) {
+      todosPersonagens = dados.results;
+    } else {
+      todosPersonagens = todosPersonagens.concat(dados.results);
+    }
+
     mostrarPersonagens(todosPersonagens);
   } catch (erro) {
-    lista.innerHTML =
-      "<p>Ops! Não foi possível carregar os personagens. Tente novamente mais tarde.</p>";
+    if (pagina === 1) {
+      lista.innerHTML = "<p>Ops! Não foi possível carregar os personagens. Tente novamente mais tarde.</p>";
+    } else {
+      alert("Muitas requisições em pouco tempo. Aguarde alguns segundos e tente novamente.");
+      paginaAtual = paginaAtual - 1;
+    }
   }
 }
 
@@ -59,6 +73,24 @@ function mostrarTodos() {
   mostrarPersonagens(todosPersonagens);
 }
 
+function filtrarPorStatus() {
+  const statusEscolhido = document.getElementById("filtroStatus").value;
+
+  if (statusEscolhido === "todos") {
+    mostrarPersonagens(todosPersonagens);
+  } else {
+    const filtrados = todosPersonagens.filter((personagem) => {
+      return personagem.status === statusEscolhido;
+    });
+    mostrarPersonagens(filtrados);
+  }
+}
+
+function carregarMais() {
+  paginaAtual = paginaAtual + 1;
+  buscarPersonagens(paginaAtual);
+}
+
 const campoBusca = document.getElementById("busca");
 
 campoBusca.addEventListener("input", () => {
@@ -70,20 +102,5 @@ campoBusca.addEventListener("input", () => {
 
   mostrarPersonagens(filtrados);
 });
-
-function filtrarPorStatus() {
-  const statusEscolhido = document.getElementById("filtroStatus").value;
-
-  if (statusEscolhido === "todos") {
-    
-    mostrarPersonagens(todosPersonagens);
-  } else {
-    
-    const filtrados = todosPersonagens.filter((personagem) => {
-      return personagem.status === statusEscolhido;
-    });
-    mostrarPersonagens(filtrados);
-  }
-}
 
 buscarPersonagens();
